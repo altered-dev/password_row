@@ -72,11 +72,15 @@ func fall(tiles: int) -> void:
 
 
 func get_chain(direction: Vector2) -> Array:
-	var symbol = field.find_existing_at_pos(start_pos + direction) as Symbol
+	var res = []
 	_visited = true
 	call_deferred("_reset_visited")
-	return [symbol] + symbol.get_chain(direction) \
-		if symbol != null and !symbol._visited and symbol.type == type else []
+	var symbols = field.find_existing_at_pos(start_pos + direction)
+	for symbol in symbols:
+		if !symbol._visited and symbol.type == type:
+			res.append(symbol)
+			res.append_array(symbol.get_chain(direction))
+	return res
 
 
 func _reset_visited() -> void:

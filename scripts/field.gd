@@ -43,17 +43,19 @@ func reset_held() -> void:
 
 
 func find_at_pos(start_pos: Vector2):
+	var res = []
 	for symbol in $symbols.get_children():
 		if symbol.start_pos == start_pos:
-			return symbol
-	return null
+			res.append(symbol)
+	return res
 
 
 func find_existing_at_pos(start_pos: Vector2):
+	var res = []
 	for symbol in $symbols.get_children():
 		if symbol.start_pos == start_pos and !symbol._removed:
-			return symbol
-	return null
+			res.append(symbol)
+	return res
 
 
 func check_for_matches() -> void:
@@ -66,8 +68,7 @@ func fill() -> void:
 	for symbol in $symbols.get_children():
 		if symbol._removed:
 			for i in range(height):
-				var s = find_existing_at_pos(symbol.start_pos + Vector2.UP * step * i)
-				if s != null:
+				for s in find_existing_at_pos(symbol.start_pos + Vector2.UP * step * i):
 					s.fall(1)
 			var new_pos := Vector2(symbol.start_pos.x - $symbols.position.x, start.y)
 			var new_s = spawn_symbol(new_pos)
